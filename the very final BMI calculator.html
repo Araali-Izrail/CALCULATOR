@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMI and Blood Pressure Calculator</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body { font-family: Arial, sans-serif; 
+    background-color:black; 
+    padding: 20px;
+    text-align: center; 
+    margin: 0; }
+  .navbar {
+     background-color:blueviolet; 
+     padding: 10px; 
+     border-radius: 10px;
+     position: center; 
+     width: 100%;
+     top: 0; 
+     z-index: 1000; 
+    }
+  .navbar button { background-color: transparent; 
+    color: rgb(251, 244, 249); 
+    border: none; 
+    cursor: pointer; 
+    margin: 0 15px; 
+    font-size: 16px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 255, 0.5); /* Add blue shadow */
+  }
+  .navbar button:hover {
+     text-decoration: underline; }
+  .navbar img { height: 40px; margin-right: 20px; }
+  .container {
+     max-width: 800px;
+     margin: auto;
+      background:black; 
+      padding: 80px 20px 20px; 
+      border-radius: 10px; 
+      box-shadow:black; }
+      input {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color:black; /* Set background color to black */
+    color: white; /* Set text color to white for better visibility */
+      }
+  button { padding: 10px; 
+    background-color: #28a745; 
+    color: rgb(5, 216, 244); 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; }
+  button:hover { 
+    background-color: #218838; }
+  canvas { 
+    max-width: 100%; 
+    height: auto; }
+  table { width: 100%; 
+    border-collapse: collapse;
+     margin-top: 10px; }
+  th, td { 
+    border: 1px solid #ccc; 
+    padding: 10px; 
+    text-align: left; }
+  th { 
+    background-color: #f2f2f2; }
+  .hidden { display: none; }
+    .header { 
+        background-color:green; 
+        color: white; 
+        padding: 20px; 
+        border-radius: 10px; 
+        margin-bottom: 20px; 
+        display: flex;
+        flex-direction: column; /* Arrange items in a column */
+        align-items: center;
+        justify-content: center;
+        gap: 10px; /* Add some space between elements */
+    }
+    .header img {
+      height: 40px;
+      vertical-align: middle;
+    }
+    .header h1 {
+      display: inline;
+      margin: 0;
+    }
+    footer { 
+        background-color: #28a745; 
+        color: white; 
+        padding: 10px; 
+        border-radius: 10px; 
+        margin-top: 20px; }
+  body, h1, h2, h3, h4, h5, h6, p, table, th, td, label, input, button {
+    color: white; /* Set text color to white */
+  }
+  <style>
+  /* ...existing code... */
+  body, h1, h2, h3, h4, h5, h6, p, table, th, td, label, input, button {
+    color: white; /* Set text color to white */
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: black; /* Set table background color to black */
+  }
+  th, td {
+    border: 1px solid #ccc; /* Set border color */
+    padding: 10px;
+    text-align: left;
+    background-color: black; /* Set cell background color to black */
+  }
+  th {
+    background-color: black; /* Set header background color to black */
+  }
+  /* ...existing code... */
+</style>
+</style>
+</head>
+<body>
+<div class="navbar">
+    <img src="" alt="Logo"/>
+    <button onclick="showInput()">Input</button>
+    <button onclick="showResults()">Results</button>
+    <button onclick="showCharts()">Charts</button>
+    <button onclick="showHistory()">History</button>
+</div>
+<div class="header">
+    <h1>SCIENCE AND INNOVATION CLUB</h1>
+    <h1>THE HEALTH CALCULATOR</h1>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiiQXmucAftATbEPjkAzJuKWkPF1XJqltW0w&s" alt="Health Icon" />
+</div>
+<div class="audio-toggle">
+    <label>
+        <input type="checkbox" id="audioToggle" checked /> Enable Auto Audio
+    </label>
+</div>
+<img src="C:\Users\ARAALI IZRAIL\OneDrive\Pictures\Screenshots\Screenshot 2025-03-18 002250.png" alt="Mini Logo" style="height: 80px; vertical-align: middle;">
+<div class="container">
+  <div id="inputSection">
+      <h2>BMI Calculator</h2>
+      <input type="number" id="weight" placeholder="Weight (kg)" oninput="calculateBMI()" />
+      <input type="number" id="height" placeholder="Height (m)" oninput="calculateBMI()" />
+
+      <h2>Blood Pressure Measurement</h2>
+      <input type="number" id="systolic" placeholder="Systolic (mmHg)" oninput="calculateBP()" />
+      <input type="number" id="diastolic" placeholder="Diastolic (mmHg)" oninput="calculateBP()" />
+  </div>
+
+  <div id="resultsSection" class="hidden">
+      <h3>Health Results</h3>
+      <table id="resultsTable">
+          <thead>
+              <tr>
+                  <th>Condition</th>
+                  <th>Value</th>
+                  <th>Advice</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>BMI</td>
+                  <td id="bmiResult"></td>
+                  <td id="bmiAdvice"></td>
+              </tr>
+              <tr>
+                  <td>Blood Pressure</td>
+                  <td id="bpResult"></td>
+                  <td id="bpAdvice"></td>
+              </tr>
+          </tbody>
+      </table>
+
+      <h3>Diet and Workout Plans</h3>
+      <table id="adviceTable">
+          <thead>
+              <tr>
+                  <th>Plan Type</th>
+                  <th>Details</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>Diet Plan</td>
+                  <td id="dietPlan"></td>
+              </tr>
+              <tr>
+                  <td>Workout Plan</td>
+                  <td id="workoutPlan"></td>
+              </tr>
+          </tbody>
+      </table>
+
+      <button onclick="saveHistory()">Save to History</button>
+      <button onclick="showCharts()">View Charts</button>
+      <button onclick="showInput()">Back to Input</button>
+  </div>
+
+  <div id="chartsSection" class="hidden">
+      <h3>BMI Chart</h3>
+      <canvas id="bmiChart"></canvas>
+      <h3>Blood Pressure Chart</h3>
+      <canvas id="bpChart"></canvas>
+      <button onclick="showInput()">Back to Input</button>
+  </div>
+
+  <div id="historySection" class="hidden">
+      <h3>Patient History</h3>
+      <table id="historyTable">
+          <thead>
+              <tr>
+                  <th>Date</th>
+                  <th>BMI</th>
+                  <th>Blood Pressure</th>
+                  <th>Advice</th>
+              </tr>
+          </thead>
+          <tbody id="historyBody">
+              <!-- History entries will be populated here -->
+          </tbody>
+      </table>
+      <button onclick="showInput()">Back to Input</button>
+  </div>
+<footer>
+    <div>
+        <p>Made by<a href="https://loyal-gnu-nxqkj6.mystrikingly.com/" target="_blank">Araali Israel</a></p>
+    </div>
+</footer>
+
+<script>
+let autoAudioEnabled = true; // Default state for audio
+
+function showInput() {
+  document.getElementById('inputSection').classList.remove('hidden');
+  document.getElementById('resultsSection').classList.add('hidden');
+  document.getElementById('chartsSection').classList.add('hidden');
+  document.getElementById('historySection').classList.add('hidden');
+}
+
+function calculateBMI() {
+  const weight = parseFloat(document.getElementById('weight').value);
+  const height = parseFloat(document.getElementById('height').value);
+  let bmi = null;
+  if (weight > 0 && height > 0) {
+      bmi = (weight / (height * height)).toFixed(2);
+      localStorage.setItem('bmi', bmi); // Store BMI in local storage
+      document.getElementById('bmiResult').innerText = bmi;
+      provideBMIAdvice(bmi);
+  } else {
+      document.getElementById('bmiResult').innerText = 'Invalid';
+      document.getElementById('bmiAdvice').innerText = '';
+  }
+  updateResultsSection();
+}
+
+function calculateBP() {
+  const systolic = parseInt(document.getElementById('systolic').value);
+  const diastolic = parseInt(document.getElementById('diastolic').value);
+  let bp = null;
+  if (systolic > 0 && diastolic > 0) {
+      bp = `${systolic}/${diastolic}`;
+      localStorage.setItem('bp', bp); // Store BP in local storage
+      document.getElementById('bpResult').innerText = bp;
+      provideBPAdvice(systolic, diastolic);
+  } else {
+      document.getElementById('bpResult').innerText = 'Invalid';
+      document.getElementById('bpAdvice').innerText = '';
+  }
+  updateResultsSection();
+}
+
+function provideBMIAdvice(bmi) {
+  let advice;
+  if (bmi < 18.5) {
+      advice = "You are underweight. Consider consulting a healthcare provider for advice.";
+      setDietAndWorkoutPlans("Increase calorie intake with healthy foods like nuts, avocados, and whole grains.", "Strength training exercises 3 times a week.");
+  } else if (bmi < 24.9) {
+      advice = "You have a healthy weight. Maintain your current lifestyle.";
+      setDietAndWorkoutPlans("Balanced diet with fruits, vegetables, and whole grains.", "Regular aerobic exercise like walking or cycling.");
+  } else if (bmi < 29.9) {
+      advice = "You are overweight. Consider a balanced diet and regular exercise.";
+      setDietAndWorkoutPlans("Reduce sugar and saturated fat intake. Focus on portion control.", "Aim for 150 minutes of moderate exercise weekly.");
+  } else {
+      advice = "You are obese. It's advisable to consult a healthcare provider.";
+      setDietAndWorkoutPlans("Follow a structured weight loss plan with a nutritionist.", "Increase daily activity and aim for at least 300 minutes of exercise weekly.");
+  }
+  document.getElementById('bmiAdvice').innerText = advice;
+  if (autoAudioEnabled) speak(advice); // Speak automatically if enabled
+}
+
+function provideBPAdvice(systolic, diastolic) {
+  let advice;
+  if (systolic < 120 && diastolic < 80) {
+      advice = "Your blood pressure is normal. Maintain a healthy lifestyle.";
+      setDietAndWorkoutPlans("Continue with a balanced diet rich in fruits and vegetables.", "Regular physical activity is recommended.");
+  } else if (systolic < 130 && diastolic < 80) {
+      advice = "Your blood pressure is elevated. Monitor it regularly.";
+      setDietAndWorkoutPlans("Limit salt intake and avoid processed foods.", "Engage in moderate exercise like brisk walking.");
+  } else if (systolic < 140 || diastolic < 90) {
+      advice = "You have Hypertension Stage 1. Consider lifestyle changes.";
+      setDietAndWorkoutPlans("Adopt a heart-healthy diet like DASH (Dietary Approaches to Stop Hypertension).", "Aim for at least 150 minutes of exercise weekly.");
+  } else {
+      advice = "You have Hypertension Stage 2. Seek medical attention.";
+      setDietAndWorkoutPlans("Follow a strict low-sodium diet. Consult a healthcare professional.", "Increase physical activity under medical supervision.");
+  }
+  document.getElementById('bpAdvice').innerText = advice;
+  if (autoAudioEnabled) speak(advice); // Speak automatically if enabled
+}
+
+function setDietAndWorkoutPlans(diet, workout) {
+  document.getElementById('dietPlan').innerText = diet;
+  document.getElementById('workoutPlan').innerText = workout;
+}
+
+function updateResultsSection() {
+  if (document.getElementById('bmiResult').innerText !== '' || document.getElementById('bpResult').innerText !== '') {
+      document.getElementById('resultsSection').classList.remove('hidden');
+  }
+}
+
+function saveHistory() {
+  const bmi = document.getElementById('bmiResult').innerText;
+  const bp = document.getElementById('bpResult').innerText;
+  const advice = `${document.getElementById('bmiAdvice').innerText} | ${document.getElementById('bpAdvice').innerText}`;
+  const date = new Date().toLocaleString();
+
+  // Save to history
+  const history = JSON.parse(localStorage.getItem('history')) || [];
+  history.push({ date, bmi, bp, advice });
+  localStorage.setItem('history', JSON.stringify(history));
+
+  alert('Data saved to history!');
+}
+
+function showHistory() {
+  const history = JSON.parse(localStorage.getItem('history')) || [];
+  const historyBody = document.getElementById('historyBody');
+  historyBody.innerHTML = ''; // Clear existing entries
+
+  history.forEach(entry => {
+      const row = `<tr>
+          <td>${entry.date}</td>
+          <td>${entry.bmi}</td>
+          <td>${entry.bp}</td>
+          <td>${entry.advice}</td>
+      </tr>`;
+      historyBody.innerHTML += row;
+  });
+
+  document.getElementById('historySection').classList.remove('hidden');
+  document.getElementById('inputSection').classList.add('hidden');
+  document.getElementById('resultsSection').classList.add('hidden');
+  document.getElementById('chartsSection').classList.add('hidden');
+}
+
+function showResults() {
+  updateResultsSection();
+  document.getElementById('inputSection').classList.add('hidden');
+  document.getElementById('chartsSection').classList.add('hidden');
+  document.getElementById('historySection').classList.add('hidden');
+}
+
+function showCharts() {
+  updateCharts();
+  document.getElementById('chartsSection').classList.remove('hidden');
+  document.getElementById('resultsSection').classList.add('hidden');
+  document.getElementById('inputSection').classList.add('hidden');
+}
+
+function updateCharts() {
+  const bmi = parseFloat(localStorage.getItem('bmi'));
+  const bp = localStorage.getItem('bp').split('/');
+
+  // Update BMI Chart
+  const ctxBmi = document.getElementById('bmiChart').getContext('2d');
+  if (bmiChartInstance) {
+    bmiChartInstance.destroy();
+  }
+  bmiChartInstance = new Chart(ctxBmi, {
+      type: 'bar',
+      data: {
+          labels: ['Underweight', 'Normal', 'Overweight', 'Obese'],
+          datasets: [{
+              label: 'BMI Categories',
+              data: [18.5, 24.9, 29.9, 40],
+              backgroundColor: ['#36A2EB', '#4BC0C0', '#FFCE56', '#FF6384'],
+          }]
+      },
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  max: 40
+              }
+          }
+      }
+  });
+
+  // Update Blood Pressure Chart
+  const ctxBp = document.getElementById('bpChart').getContext('2d');
+  if (bpChartInstance) {
+    bpChartInstance.destroy();
+  }
+  bpChartInstance = new Chart(ctxBp, {
+      type: 'line',
+      data: {
+          labels: ['Normal', 'Elevated', 'Hypertension Stage 1', 'Hypertension Stage 2'],
+          datasets: [{
+              label: 'Blood Pressure Levels',
+              data: [120, 129, 139, 180],
+              borderColor: '#FF6384',
+              fill: false,
+          }]
+      },
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  max: 200
+              }
+          }
+      }
+  });
+}
+
+function speak(text) {
+  const speech = new SpeechSynthesisUtterance(text);
+  window.speechSynthesis.speak(speech);
+}
+
+// Toggle audio functionality
+document.getElementById('audioToggle').addEventListener('change', function() {
+  autoAudioEnabled = this.checked; // Update the auto audio state
+});
+
+// Show input section by default
+showInput();
+</script>
+<script>
+let bmiChartInstance = null;
+let bpChartInstance = null;
+
+function updateCharts() {
+  const bmi = parseFloat(localStorage.getItem('bmi'));
+  const bp = localStorage.getItem('bp') ? localStorage.getItem('bp').split('/') : [0, 0];
+
+  // Update BMI Chart
+  const ctxBmi = document.getElementById('bmiChart').getContext('2d');
+  if (bmiChartInstance) {
+    bmiChartInstance.destroy();
+  }
+  bmiChartInstance = new Chart(ctxBmi, {
+      type: 'bar',
+      data: {
+          labels: ['Underweight', 'Normal', 'Overweight', 'Obese'],
+          datasets: [{
+              label: 'BMI Categories',
+              data: [18.5, 24.9, 29.9, 40],
+              backgroundColor: ['#36A2EB', '#4BC0C0', '#FFCE56', '#FF6384'],
+          }]
+      },
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  max: 40
+              }
+          }
+      }
+  });
+
+  // Update Blood Pressure Chart
+  const ctxBp = document.getElementById('bpChart').getContext('2d');
+  if (bpChartInstance) {
+    bpChartInstance.destroy();
+  }
+  bpChartInstance = new Chart(ctxBp, {
+      type: 'line',
+      data: {
+          labels: ['Normal', 'Elevated', 'Hypertension Stage 1', 'Hypertension Stage 2'],
+          datasets: [{
+              label: 'Blood Pressure Levels',
+              data: [120, 129, 139, 180],
+              borderColor: '#FF6384',
+              fill: false,
+          }]
+      },
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  max: 200
+              }
+          }
+      }
+  });
+}
+</script>
+</script>
+<script>
+    function showCharts() {
+      updateCharts();
+      document.getElementById('chartsSection').classList.remove('hidden');
+      document.getElementById('resultsSection').classList.add('hidden');
+      document.getElementById('inputSection').classList.add('hidden');
+    }
+    </script>
+</body>
+</html>
